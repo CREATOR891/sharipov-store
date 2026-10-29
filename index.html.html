@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHARIPOV STORE | PREMIUM</title>
+    <style>
+        :root {
+            --bg-color: #030303;
+            --card-bg: rgba(18, 18, 22, 0.75);
+            --gold: #FFD700;
+            --gold-light: #FFF070;
+            --gold-dark: #B8860B;
+            --gold-glow: rgba(255, 215, 0, 0.4);
+            --text-color: #F0F0F0;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Футуристичный фон с неоновым свечением */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(255, 215, 0, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(184, 134, 11, 0.06) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.03) 0%, transparent 60%);
+            z-index: -1;
+            animation: pulseGlow 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { transform: scale(1.08) rotate(2deg); opacity: 0.9; }
+        }
+
+        /* Кнопка меню */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: rgba(15, 15, 18, 0.85);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px var(--gold-glow);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .menu-toggle:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            transform: scale(1.08) rotate(90deg);
+        }
+
+        /* Боковое меню Glassmorphism */
+        aside {
+            position: fixed;
+            top: 0; left: calc(-1 * var(--sidebar-width));
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: rgba(10, 10, 14, 0.92);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 215, 0, 0.25);
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 25px 15px;
+            box-shadow: 10px 0 40px rgba(0, 0, 0, 0.9);
+        }
+
+        aside.active {
+            left: 0;
+        }
+
+        .sidebar-brand {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px var(--gold-glow);
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #FFF, var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .menu-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            max-height: calc(100vh - 90px);
+            padding-right: 5px;
+        }
+
+        .menu-links::-webkit-scrollbar {
+            width: 4px;
+        }
+        .menu-links::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 4px;
+        }
+
+        .menu-links li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 16px;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .menu-links li a:hover, .menu-links li a.active {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.15), transparent);
+            color: var(--gold);
+            border-left-color: var(--gold);
+            transform: translateX(6px);
+            box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.1);
+        }
+
+        .menu-links li a span {
+            font-size: 18px;
+        }
+
+        /* Контент */
+        main {
+            flex: 1;
+            padding: 40px 20px;
+            max-width: 1050px;
+            margin-left: auto;
+            margin-right: auto;
+            transition: margin 0.4s ease;
+        }
+
+        .page-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.4s forwards;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: var(--gold);
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 25px var(--gold-glow);
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 15px;
+            color: #ccc;
+            text-align: center;
+        }
+
+        /* Промо баннеры */
+        .promo-banner {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(184, 134, 11, 0.05));
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            padding: 18px;
+            border-radius: 14px;
+            margin-bottom: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .promo-banner h3 {
+            color: var(--gold);
+            font-size: 20px;
+            margin-bottom: 6px;
+            text-shadow: 0 0 10px var(--gold-glow);
+        }
+
+        .goal-banner {
+            background: linear-gradient(135deg, rgba(0, 230, 118, 0.1), rgba(0, 0, 0, 0.4));
+            border: 1px solid rgba(0, 230, 118, 0.4);
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.15);
+        }
+
+        .goal-banner h3 {
+            color: #00E676;
+            font-size: 20px;
+            margin-bottom: 6px;
+            text-shadow: 0 0 10px rgba(0, 230, 118, 0.4);
+        }
+
+        /* Карточки */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 22px;
+            margin-top: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 18px;
+            padding: 24px;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--gold);
+            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.25);
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card h3 {
+            color: var(--gold);
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .price-tag {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            margin: 12px 0;
+            text-shadow: 0 0 12px var(--gold-glow);
+        }
+
+        .price-tag span {
+            color: var(--gold);
+        }
+
+        .calc-info {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        /* Кнопки */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #000;
+            font-weight: 800;
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.7);
+            transform: scale(1.02);
+        }
+
+        /* Валюта */
+        .currency-box {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+        }
+
+        .currency-box select {
+            background: #000;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (min-width: 900px) {
+            aside {
+                left: 0;
+            }
+            main {
+                margin-left: var(--sidebar-width);
+            }
+            .menu-toggle, .overlay {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+    <aside id="sidebar">
+        <div class="sidebar-brand">SHARIPOV STORE</div>
+        <ul class="menu-links">
+            <li><a href="#" onclick="showSection('home', this)" class="active"><span>🏠</span>Главная</a></li>
+            <li><a href="#" onclick="showSection('about', this)"><span>👑</span>О мне</a></li>
+            <li><a href="#" onclick="showSection('mobile-soft', this)"><span>📱</span>Софт для телефона</a></li>
+            <li><a href="#" onclick="showSection('mobile-opt', this)"><span>⚡</span>Оптимизация телефона</a></li>
+            <li><a href="#" onclick="showSection('pc-soft', this)"><span>💻</span>Софт для ПК</a></li>
+            <li><a href="#" onclick="showSection('pc-opt', this)"><span>⚙️</span>Оптимизация ПК</a></li>
+            <li><a href="#" onclick="showSection('file-replace', this)"><span>📁</span>Замена файла (Premium)</a></li>
+            <li><a href="#" onclick="showSection('emulator', this)"><span>🎮</span>Эмулятор (Premium)</a></li>
+            <li><a href="#" onclick="showSection('currency', this)"><span>💱</span>Валюта и цены</a></li>
+            <li><a href="#" onclick="showSection('social', this)"><span>▶</span>YouTube и сети</a></li>
+            <li><a href="#" onclick="showSection('contact', this)"><span>✉</span>Покупка / Контакты</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <!-- Главная -->
+        <section id="home" class="page-section active">
+            <h1>SHARIPOV STORE</h1>
+            
+            <div class="promo-banner">
+                <h3>🔥 Внимание! Акция и важная информация!</h3>
+                <p style="margin: 0; color: #fff;">Сейчас проходит акция, все цены снижены! Они могут увеличиться в любое время, поэтому берите поскорей. Также учтите, что пока софтов и товаров не так много, потому что над проектом работает всего один человек!</p>
+            </div>
+
+            <div class="goal-banner">
+                <h3>🎁 Цель: 1000 подписчиков!</h3>
+                <p style="margin: 0; color: #E0E0E0;">Когда на канале будет 1000 подписчиков, будут выпущены БЕСПЛАТНЫЕ софты и оптимизации для всех!</p>
+            </div>
+
+            <p>Элитный игровой софт, оптимизация и лучшие услуги для Free Fire и других игр. Не думайте насчет платежа — оплату можно произвести даже алмазами!</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Софт для телефона</h3>
+                    <p>Root и Non-Root версии с мощным функционалом.</p>
+                    <button class="btn" onclick="showSection('mobile-soft', document.querySelectorAll('.menu-links a')[2])">Перейти</button>
+                </div>
+                <div class="card">
+                    <h3>Оптимизация ПК</h3>
+                    <p>Удаление мусора, увеличение FPS и VIP настройки.</p>
+                    <button class="btn" onclick="showSection('pc-opt', document.querySelectorAll('.menu-links a')[5])">Перейти</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- О мне -->
+        <section id="about" class="page-section">
+            <h1>О мне</h1>
+            <p>Привет! Меня зовут <strong>Sharipov</strong>. Я профессиональный разработчик, программирую, создаю уникальные утилиты, скрипты, игровые модификации и кастомные решения в одиночку. Моя цель — создавать самый качественный, безопасный и производительный софт для игроков. Каждый проект отчищен, оптимизирован и сделан на совесть!</p>
+        </section>
+
+        <!-- Софт для телефона -->
+        <section id="mobile-soft" class="page-section">
+            <h1>Софт для телефона</h1>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Софт (Без Root)</h3>
+                    <p>Работает на Aimbot Pro и ESP. Отличный выбор для безопасной и комфортной игры.</p>
+                    <div class="price-tag"><span class="converted-price" data-tjs="15">15 TJS</span></div>
+                    <div class="calc-info">за 20 часов / расчет за 3 дня: ~45 TJS</div>
+                    <button class="btn" onclick="buyRedirect()">Купить</button>
+                </div>
+                <div class="card">
+                    <h3>Софт (С Root правами)</h3>
+                    <p>Максимальный функционал: работает Aim Drag, AimBody и Chams Menu.</p>
+                    <div class="price-tag"><span class="converted-price" data-tjs="100">100 TJS</span></div>
+                    <div class="calc-info">за 15 часов / расчет за 3 дня: ~300 TJS</div>
+                    <button class="btn" onclick="buyRedirect()">Купить</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Оптимизация телефона -->
+        <section id="mobile-opt" class="page-section">
+            <h1>Оптимизация телефона</h1>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Полная оптимизация ОС</h3>
+                    <p>Удаляет весь мусор, увеличение FPS, VIP настройки на ваш вкус.</p>
+                    <div class="price-tag"><span class="converted-price" data-tjs="25">25 TJS</span></div>
+                    <button class="btn" onclick="buyRedirect()">Купить</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Софт для ПК -->
+        <section id="pc-soft" class="page-section">
+            <h1>Софт для ПК</h1>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>PC Gaming Soft (2 вида Aimbota)</h3>
+                    <p>Доступно 2 вида Aimbota. Включает Chams и ESP для тотального контроля.</p>
+                    <div class="price-tag"><span class="converted-price" data-tjs="50">50 TJS</span></div>
+                    <button class="btn" onclick="buyRedirect()">Купить</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Оптимизация ПК -->
+        <section id="pc-opt" class="page-section">
+            <h1>Оптимизация ПК</h1>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Deep Windows Tweak</h3>
+                    <p>Удаляет весь мусор, увеличивает FPS, VIP настройки на ваш вкус для максимального комфорта.</p>
+                    <div class="price-tag"><span class="converted-price" data-tjs="60">60 TJS</span></div>
+                    <button class="btn" onclick="buyRedirect()">Купить</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Замена файла -->
+        <section id="file-replace" class="page-section">
+            <h1>Услуга: Замена файла (Premium)</h1>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Кастомная замена файлов Premium (Телефон / ПК)</h3>
+                    <p>Эксклюзивная замена на более 10 видов персонажей, замена файла оружия, стенки и профиля.</p>
+                    <div class="price-tag"><span class="converted-price" data-tjs="15">15 TJS</span></div>
+                    <button class="btn" onclick="buyRedirect()">Купить</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Эмулятор -->
+        <section id="emulator" class="page-section">
+            <h1>Эмулятор & Free Fire (Premium)</h1>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Другой эмулятор Premium (20 часов)</h3>
+                    <p>Премиум настройка и специальный мощный софт под другой эмулятор.</p>
+                    <div class="price-tag"><span class="converted-price" data-tjs="150">150 TJS</span></div>
+                    <button class="btn" onclick="buyRedirect()">Купить</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Валюта -->
+        <section id="currency" class="page-section">
+            <h1>Выбор валюты</h1>
+            <div class="currency-box">
+                <label>Выберите валюту:</label>
+                <select id="currencySelect" onchange="changeCurrency()">
+                    <option value="TJS">🇹🇯 Сомони (TJS)</option>
+                    <option value="RUB">🇷🇺 Рубль (₽)</option>
+                    <option value="KZT">🇰🇿 Тенге (KZT)</option>
+                    <option value="KGS">🇰🇬 Сом (KGS)</option>
+                    <option value="UZS">🇺🇿 Сум (UZS)</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- YouTube -->
+        <section id="social" class="page-section">
+            <h1>YouTube и сети</h1>
+            <div class="card">
+                <h3>Официальный YouTube</h3>
+                <p>Следите за новостями и обзорами:</p>
+                <a href="https://www.youtube.com/@FF_MAXX6" target="_blank" class="btn">YouTube @FF_MAXX6</a>
+            </div>
+        </section>
+
+        <!-- Контакты -->
+        <section id="contact" class="page-section">
+            <h1>Покупка</h1>
+            <div class="card" style="text-align: center; padding: 30px;">
+                <h3>Для покупки</h3>
+                <p style="font-size: 16px; margin: 15px 0;">Напишите в личные сообщения в TikTok! (Оплату можно произвести даже алмазами)</p>
+                <a href="https://www.tiktok.com" target="_blank" class="btn" style="max-width: 250px; margin: 0 auto;">TikTok</a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const rates = {
+            TJS: 1,
+            RUB: 8.5,
+            KZT: 44,
+            KGS: 8.2,
+            UZS: 1200
+        };
+
+        const symbols = {
+            TJS: ' TJS',
+            RUB: ' ₽',
+            KZT: ' ₸',
+            KGS: ' сом',
+            UZS: ' UZS'
+        };
+
+        function changeCurrency() {
+            const currency = document.getElementById('currencySelect').value;
+            const rate = rates[currency];
+            const symbol = symbols[currency];
+
+            document.querySelectorAll('.converted-price').forEach(el => {
+                const tjsPrice = parseFloat(el.getAttribute('data-tjs'));
+                const converted = Math.round(tjsPrice * rate);
+                el.innerText = `${converted} ${symbol}`;
+            });
+        }
+
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('.menu-links a').forEach(link => link.classList.remove('active'));
+            if (element) element.classList.add('active');
+
+            if (window.innerWidth < 900) toggleMenu();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function buyRedirect() {
+            showSection('contact', document.querySelectorAll('.menu-links a')[10]);
+        }
+    </script>
+</body>
+</html>
